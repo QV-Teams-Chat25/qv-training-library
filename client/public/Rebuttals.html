@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QV Training Library - Rebuttals</title>
+  <style>
+    :root {
+      --qv-blue: #003366;
+      --qv-light: #f0f2f5;
+      --qv-card: #ffffff;
+      --qv-text: #233044;
+      --qv-muted: #6a7380;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background: var(--qv-light);
+      color: var(--qv-text);
+    }
+
+    header {
+      background: var(--qv-blue);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(900px, 100%);
+      background: var(--qv-card);
+      border-radius: 12px;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+      padding: 28px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--qv-blue);
+    }
+
+    .note {
+      color: var(--qv-muted);
+      margin-bottom: 22px;
+    }
+
+    .campaign-field {
+      margin-bottom: 18px;
+    }
+
+    .campaign-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #355070;
+      margin-bottom: 8px;
+    }
+
+    .campaign-select {
+      width: 100%;
+      max-width: 520px;
+      padding: 10px 12px;
+      border: 1px solid #cfd8e3;
+      border-radius: 8px;
+      background: #fff;
+      color: #233044;
+      font-size: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .grid-btn {
+      border: 1px solid #cbdcf2;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+      color: #13406f;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.01em;
+      border-radius: 10px;
+      padding: 16px 10px;
+      cursor: pointer;
+      min-height: 72px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(16, 54, 92, 0.08);
+      transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .grid-btn:hover {
+      background: linear-gradient(180deg, #f2f8ff 0%, #e6f0ff 100%);
+      border-color: #b6cdea;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 2px 6px rgba(16, 54, 92, 0.12);
+    }
+
+    .grid-btn:focus-visible {
+      outline: 3px solid #8ab3e6;
+      outline-offset: 2px;
+    }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .home-btn {
+      background: #1e67cc;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 20;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(760px, 100%);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+      padding: 24px;
+    }
+
+    .system-message {
+      background: #fff8d9;
+      border: 1px solid #ecd981;
+      color: #6a5510;
+      font-size: 14px;
+      line-height: 1.45;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .script-body {
+      white-space: pre-line;
+      line-height: 1.5;
+      color: #2d3748;
+      margin-bottom: 18px;
+    }
+
+    .modal-action {
+      display: inline-block;
+      background: #1e67cc;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+    }
+
+    footer {
+      border-top: 1px solid #d6dbe3;
+      background: #fff;
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #4b5563;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>QV Training Library --- Rebutals</h1>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Rebuttals</h2>
+      <p class="note">Select a campaign, then select a rebuttal box to open the published script language.</p>
+
+      <div class="campaign-field">
+        <label class="campaign-label" for="campaignSelect">Select Active Campaign:</label>
+        <select class="campaign-select" id="campaignSelect"></select>
+      </div>
+
+      <div class="grid" id="rebuttalsGrid">
+        <button class="grid-btn" data-index="0">Rebuttal 1</button>
+        <button class="grid-btn" data-index="1">Rebuttal 2</button>
+        <button class="grid-btn" data-index="2">Rebuttal 3</button>
+        <button class="grid-btn" data-index="3">Rebuttal 4</button>
+        <button class="grid-btn" data-index="4">Rebuttal 5</button>
+        <button class="grid-btn" data-index="5">Rebuttal 6</button>
+        <button class="grid-btn" data-index="6">Rebuttal 7</button>
+        <button class="grid-btn" data-index="7">Rebuttal 8</button>
+        <button class="grid-btn" data-index="8">Rebuttal 9</button>
+        <button class="grid-btn" data-index="9">Rebuttal 10</button>
+        <button class="grid-btn" data-index="10">Rebuttal 11</button>
+        <button class="grid-btn" data-index="11">Rebuttal 12</button>
+        <button class="grid-btn" data-index="12">Rebuttal 13</button>
+        <button class="grid-btn" data-index="13">Rebuttal 14</button>
+        <button class="grid-btn" data-index="14">Rebuttal 15</button>
+        <button class="grid-btn" data-index="15">Rebuttal 16</button>
+      </div>
+
+      <div class="actions">
+        <a class="home-btn" href="/#/">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="rebuttalModal" aria-hidden="true">
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="system-message" id="systemMessage">
+        System Notice: This rebuttal content is currently under formal review by Management and Quality Assurance. Agents must continue following approved live guidance and current workflow tools until final language is published. Once approved, updated content will be deployed to support consistent compliance outcomes and stronger call success performance.
+      </div>
+      <h2 id="modalTitle">Rebuttal</h2>
+      <div class="script-body" id="modalBody"></div>
+      <button class="modal-action" id="closeModalBtn">Back to Rebuttals</button>
+    </section>
+  </div>
+
+  <footer>
+    <div>Copyright © 2026 Quality Voices LLC. All rights reserved. Confidential and proprietary information for authorized business use only.</div>
+    <div>IT Legal Notice: Unauthorized access, use, disclosure, copying, or distribution is prohibited and may result in disciplinary action, civil liability, and criminal penalties.</div>
+  </footer>
+
+  <script src="/qvApiConfig.js"></script>
+  <script src="/apiService.js"></script>
+  <script>
+    (function () {
+      var CAMPAIGNS = [
+        'General',
+        'Brown (NNL, PD)',
+        'Cruz ($250+ PD, MR, ND, PD)',
+        'NRS (NNL, PD)',
+        'Paxton (NNL, PD)',
+        'Presidential Victory Fund PD',
+        'RNC (NNL, Sp NNL, Sp PD $250+, Sp PD, UNF PD)',
+        'SCF NNL',
+        'TPP PD'
+      ];
+      var rebuttals = {};
+      var loadPromise;
+
+      var modal = document.getElementById('rebuttalModal');
+      var modalTitle = document.getElementById('modalTitle');
+      var modalBody = document.getElementById('modalBody');
+      var closeBtn = document.getElementById('closeModalBtn');
+      var grid = document.getElementById('rebuttalsGrid');
+      var campaignSelect = document.getElementById('campaignSelect');
+      var activeCampaign = CAMPAIGNS[0];
+      var footerLines = document.querySelectorAll('footer div');
+      var footerSyncLine = footerLines.length > 1 ? footerLines[1] : null;
+      var footerBaseText = footerSyncLine ? footerSyncLine.textContent : '';
+
+      function showSyncError() {
+        if (footerSyncLine) {
+          footerSyncLine.textContent = footerBaseText + ' Sync Error';
+        }
+      }
+
+      function clearSyncError() {
+        if (footerSyncLine) {
+          footerSyncLine.textContent = footerBaseText;
+        }
+      }
+
+      function loadRebuttals() {
+        return window.QVApiService.getRebuttals().then(function (data) {
+          rebuttals = (data && data.live) || {};
+          clearSyncError();
+        }).catch(function () {
+          rebuttals = {};
+          showSyncError();
+        });
+      }
+
+      function isManagerContext() {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('role') === 'manager') {
+          return true;
+        }
+        var ref = document.referrer || '';
+        return ref.indexOf('/#/manager') >= 0 || ref.indexOf('/manager') >= 0;
+      }
+
+      function setupHomeButtons() {
+        var managerContext = isManagerContext();
+        var targetPath = managerContext ? '/#/manager' : '/#/';
+        var links = document.querySelectorAll('a.home-btn, a.modal-action[href]');
+
+        links.forEach(function (link) {
+          var text = (link.textContent || '').trim().toLowerCase();
+          if (text !== 'back to home') {
+            return;
+          }
+          link.setAttribute('href', targetPath);
+          link.addEventListener('click', function (event) {
+            var ref = document.referrer || '';
+            var fromManager = ref.indexOf('/#/manager') >= 0 || ref.indexOf('/manager') >= 0;
+            if (managerContext && fromManager && window.history.length > 1) {
+              event.preventDefault();
+              window.history.back();
+            }
+          });
+        });
+      }
+
+      function renderCampaignOptions() {
+        if (!(campaignSelect instanceof HTMLSelectElement)) {
+          return;
+        }
+        campaignSelect.innerHTML = '';
+        CAMPAIGNS.forEach(function (campaign) {
+          var option = document.createElement('option');
+          option.value = campaign;
+          option.textContent = campaign;
+          campaignSelect.appendChild(option);
+        });
+        campaignSelect.value = activeCampaign;
+      }
+
+      function getRebuttalHtmlForCampaign(campaign, index) {
+        var campaignData = rebuttals[campaign];
+        if (!campaignData) {
+          return '';
+        }
+        if (typeof campaignData === 'string') {
+          return campaignData;
+        }
+        if (typeof campaignData === 'object' && campaignData !== null) {
+          var rebuttalNumber = String(index + 1);
+          return campaignData[rebuttalNumber] || campaignData['Rebuttal ' + rebuttalNumber] || '';
+        }
+        return '';
+      }
+
+      async function openModal(index) {
+        await loadPromise;
+        var rebuttalNumber = String(index + 1);
+        var liveHtml = getRebuttalHtmlForCampaign(activeCampaign, index);
+        modalTitle.textContent = activeCampaign + ' - Rebuttal ' + rebuttalNumber;
+        if (liveHtml) {
+          modalBody.innerHTML = liveHtml;
+        } else {
+          modalBody.textContent = 'Live rebuttal content has not been published yet for this campaign and rebuttal. Please continue to follow the current approved workflow guidance.';
+        }
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      grid.addEventListener('click', function (event) {
+        var target = event.target;
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+        if (!target.classList.contains('grid-btn')) {
+          return;
+        }
+        var index = Number(target.getAttribute('data-index'));
+        openModal(index);
+      });
+
+      if (campaignSelect instanceof HTMLSelectElement) {
+        campaignSelect.addEventListener('change', function () {
+          activeCampaign = campaignSelect.value || CAMPAIGNS[0];
+        });
+      }
+
+      loadPromise = loadRebuttals();
+      setupHomeButtons();
+      renderCampaignOptions();
+
+      closeBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

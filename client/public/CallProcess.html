@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QV Training Library - Call Process</title>
+  <style>
+    :root {
+      --qv-blue: #003366;
+      --qv-light: #f0f2f5;
+      --qv-card: #ffffff;
+      --qv-text: #233044;
+      --qv-muted: #6a7380;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background: var(--qv-light);
+      color: var(--qv-text);
+    }
+
+    header {
+      background: var(--qv-blue);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(900px, 100%);
+      background: var(--qv-card);
+      border-radius: 12px;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+      padding: 28px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--qv-blue);
+    }
+
+    .note {
+      color: var(--qv-muted);
+      margin-bottom: 22px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .grid-btn {
+      border: 1px solid #cbdcf2;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+      color: #13406f;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.01em;
+      border-radius: 10px;
+      padding: 16px 10px;
+      cursor: pointer;
+      min-height: 72px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(16, 54, 92, 0.08);
+      transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .grid-btn:hover {
+      background: linear-gradient(180deg, #f2f8ff 0%, #e6f0ff 100%);
+      border-color: #b6cdea;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 2px 6px rgba(16, 54, 92, 0.12);
+    }
+
+    .grid-btn:focus-visible {
+      outline: 3px solid #8ab3e6;
+      outline-offset: 2px;
+    }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .home-btn {
+      background: #1e67cc;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 20;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(760px, 100%);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+      padding: 24px;
+    }
+
+    .system-message {
+      background: #fff8d9;
+      border: 1px solid #ecd981;
+      color: #6a5510;
+      font-size: 14px;
+      line-height: 1.45;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .script-body {
+      white-space: pre-line;
+      line-height: 1.5;
+      color: #2d3748;
+      margin-bottom: 18px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-action {
+      display: inline-block;
+      background: #1e67cc;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @media (max-width: 680px) {
+      .grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+    }
+
+    footer {
+      border-top: 1px solid #d6dbe3;
+      background: #fff;
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #4b5563;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>QV Training Library --- Call Process</h1>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Call Process</h2>
+      <p class="note">Select a box to open process language in a pop-out view.</p>
+
+      <div class="grid" id="callProcessGrid">
+        <button class="grid-btn" data-index="0">Call Process</button>
+        <button class="grid-btn" data-index="1">Verification</button>
+      </div>
+
+      <div class="actions">
+        <a class="home-btn" href="/#/">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="callProcessModal" aria-hidden="true">
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="system-message" id="systemMessage">
+        System Notice: This call process content is currently under formal review by Management and Quality Assurance. Agents must continue using approved live workflow guidance until final language is released. Once approved, updates will be deployed to tools to support compliance consistency, improved call quality, and stronger success outcomes.
+      </div>
+      <h2 id="modalTitle">Call Process</h2>
+      <div class="script-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="modal-action" id="closeModalBtn">Back to Call Process</button>
+        <a class="modal-action" href="/#/">Back to Home</a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div>Copyright © 2026 Quality Voices LLC. All rights reserved. Confidential and proprietary information for authorized business use only.</div>
+    <div>IT Legal Notice: Unauthorized access, use, disclosure, copying, or distribution is prohibited and may result in disciplinary action, civil liability, and criminal penalties.</div>
+  </footer>
+
+  <script src="/qvApiConfig.js"></script>
+  <script src="/apiService.js"></script>
+  <script>
+    (function () {
+      var categories = ['Call Process', 'Verification'];
+      var liveProcess = {
+        'Call Process': '',
+        Verification: ''
+      };
+      var loadPromise;
+
+      var modal = document.getElementById('callProcessModal');
+      var modalTitle = document.getElementById('modalTitle');
+      var modalBody = document.getElementById('modalBody');
+      var closeBtn = document.getElementById('closeModalBtn');
+      var grid = document.getElementById('callProcessGrid');
+      var footerLines = document.querySelectorAll('footer div');
+      var footerSyncLine = footerLines.length > 1 ? footerLines[1] : null;
+      var footerBaseText = footerSyncLine ? footerSyncLine.textContent : '';
+
+      function showSyncError() {
+        if (footerSyncLine) {
+          footerSyncLine.textContent = footerBaseText + ' Sync Error';
+        }
+      }
+
+      function clearSyncError() {
+        if (footerSyncLine) {
+          footerSyncLine.textContent = footerBaseText;
+        }
+      }
+
+      function loadProcess() {
+        return window.QVApiService.getProcess().then(function (data) {
+          liveProcess = (data && data.live) || {
+            'Call Process': '',
+            Verification: ''
+          };
+          clearSyncError();
+        }).catch(function () {
+          liveProcess = {
+            'Call Process': '',
+            Verification: ''
+          };
+          showSyncError();
+        });
+      }
+
+      function isManagerContext() {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('role') === 'manager') {
+          return true;
+        }
+        var ref = document.referrer || '';
+        return ref.indexOf('/#/manager') >= 0 || ref.indexOf('/manager') >= 0;
+      }
+
+      function setupHomeButtons() {
+        var managerContext = isManagerContext();
+        var targetPath = managerContext ? '/#/manager' : '/#/';
+        var links = document.querySelectorAll('a.home-btn, a.modal-action[href]');
+
+        links.forEach(function (link) {
+          var text = (link.textContent || '').trim().toLowerCase();
+          if (text !== 'back to home') {
+            return;
+          }
+          link.setAttribute('href', targetPath);
+          link.addEventListener('click', function (event) {
+            var ref = document.referrer || '';
+            var fromManager = ref.indexOf('/#/manager') >= 0 || ref.indexOf('/manager') >= 0;
+            if (managerContext && fromManager && window.history.length > 1) {
+              event.preventDefault();
+              window.history.back();
+            }
+          });
+        });
+      }
+
+      async function openModal(index) {
+        await loadPromise;
+        var category = categories[index];
+        if (!category) {
+          return;
+        }
+        modalTitle.textContent = category;
+        var liveHtml = liveProcess[category];
+        if (liveHtml) {
+          modalBody.innerHTML = liveHtml;
+        } else {
+          modalBody.textContent = 'Live content has not been published for this category yet. Please continue to follow the current approved workflow guidance.';
+        }
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      grid.addEventListener('click', function (event) {
+        var target = event.target;
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+        if (!target.classList.contains('grid-btn')) {
+          return;
+        }
+        var index = Number(target.getAttribute('data-index'));
+        openModal(index);
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+
+  loadPromise = loadProcess();
+      setupHomeButtons();
+
+      modal.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

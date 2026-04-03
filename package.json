@@ -1,0 +1,27 @@
+{
+  "scripts": {
+    "build": "npm --prefix client run build",
+    "pm2:start": "npm run build && pm2 start ecosystem.config.js && pm2 save && pm2 list",
+    "pm2:restart": "pm2 startOrRestart ecosystem.config.js --update-env && pm2 save && pm2 list",
+    "pm2:stop": "pm2 delete qv-backend qv-client",
+    "final-build": "npm run build && npm run pm2:restart",
+    "start:prod": "npm run pm2:start"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
+    "axios": "^1.14.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.3",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.9.5"
+  }
+}
