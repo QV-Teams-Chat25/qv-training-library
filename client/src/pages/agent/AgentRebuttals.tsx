@@ -202,8 +202,8 @@ const AgentRebuttals: React.FC = () => {
     };
   }, [activeCampaign]);
 
-  const getAllCampaignEntries = () => {
-    return CAMPAIGNS.flatMap((campaign) => getCampaignEntries(rebuttals[campaign], campaign));
+  const getAllCampaignEntries = (campaigns: string[]) => {
+    return campaigns.flatMap((campaign) => getCampaignEntries(rebuttals[campaign], campaign));
   };
 
   const resolveHomePath = () => {
@@ -228,9 +228,9 @@ const AgentRebuttals: React.FC = () => {
   };
 
   const availableCampaigns = Array.from(new Set([...CAMPAIGNS, ...Object.keys(rebuttals || {})])).filter((campaign) => campaign && campaign !== ALL_CAMPAIGNS);
-  const allCampaignEntries = getAllCampaignEntries();
-  const displayedEntries: Array<RebuttalEntry | null> = activeCampaign === ALL_CAMPAIGNS
-    ? Array.from({ length: 16 }, (_, index) => allCampaignEntries[index] || null)
+  const allCampaignEntries = getAllCampaignEntries(availableCampaigns);
+  const displayedEntries: RebuttalEntry[] = activeCampaign === ALL_CAMPAIGNS
+    ? allCampaignEntries
     : getCampaignEntries(rebuttals[activeCampaign], activeCampaign);
   const activeEntry = activeIndex === null ? null : displayedEntries[activeIndex] || null;
   const { rebuttalHtml, presentationHtml } = splitPresentationSections(activeEntry?.content || '');
@@ -272,31 +272,26 @@ const AgentRebuttals: React.FC = () => {
           <div style={{ display: 'grid', gridTemplateColumns: activeCampaign === ALL_CAMPAIGNS ? 'repeat(4, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
             {displayedEntries.map((entry, index) => (
               <button
-                key={entry ? `${entry.campaign}-${entry.title}-${index}` : `placeholder-${index}`}
+                key={`${entry.campaign}-${entry.title}-${index}`}
                 className="grid-btn"
-                title={entry ? entry.title : undefined}
-                onClick={async () => {
-                  if (!entry) {
-                    return;
-                  }
-                  const freshLive = await refreshLiveRebuttals();
-                  setRebuttals(freshLive);
+                title={entry.title}
+                onClick={() => {
                   setHoveredTipIndex(null);
                   setActiveIndex(index);
+                  void refreshLiveRebuttals();
                 }}
                 onMouseLeave={() => setHoveredTipIndex((current) => (current === index ? null : current))}
-                disabled={!entry}
-                style={{ border: entry ? '1px solid #cbdcf2' : '1px dashed #d8deea', background: entry ? 'linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%)' : '#f8fafc', color: entry ? '#13406f' : '#8a97ab', fontWeight: 700, fontSize: activeCampaign === ALL_CAMPAIGNS ? '16px' : '18px', letterSpacing: '0.01em', borderRadius: '10px', padding: '16px 10px', cursor: entry ? 'pointer' : 'default', minHeight: activeCampaign === ALL_CAMPAIGNS ? '64px' : '72px', boxShadow: entry ? 'inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(16, 54, 92, 0.08)' : 'none', transition: 'background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease', textAlign: 'center', position: 'relative', overflow: 'visible', zIndex: hoveredTipIndex === index ? 5 : 1 }}
+                style={{ border: '1px solid #cbdcf2', background: 'linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%)', color: '#13406f', fontWeight: 700, fontSize: activeCampaign === ALL_CAMPAIGNS ? '16px' : '18px', letterSpacing: '0.01em', borderRadius: '10px', padding: '16px 10px', cursor: 'pointer', minHeight: activeCampaign === ALL_CAMPAIGNS ? '64px' : '72px', boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(16, 54, 92, 0.08)', transition: 'background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease', textAlign: 'center', position: 'relative', overflow: 'visible', zIndex: hoveredTipIndex === index ? 5 : 1 }}
               >
                 <div
-                  title={entry?.deliveryTip ? `Delivery Tip: ${entry.deliveryTip}` : undefined}
+                  title={entry.deliveryTip ? `Delivery Tip: ${entry.deliveryTip}` : undefined}
                   onMouseEnter={() => {
-                    if (entry?.deliveryTip) {
+                    if (entry.deliveryTip) {
                       setHoveredTipIndex(index);
                     }
                   }}
                   onFocus={() => {
-                    if (entry?.deliveryTip) {
+                    if (entry.deliveryTip) {
                       setHoveredTipIndex(index);
                     }
                   }}
@@ -304,11 +299,11 @@ const AgentRebuttals: React.FC = () => {
                   style={{ display: 'flex', alignItems: 'center', justifyContent: activeCampaign === ALL_CAMPAIGNS ? 'space-between' : 'center', gap: '8px', width: '100%', textAlign: activeCampaign === ALL_CAMPAIGNS ? 'left' : 'center' }}
                 >
                   <span style={{ flex: 1 }}>
-                    {entry ? entry.title : '---'}
+                    {entry.title}
                   </span>
-                  {entry?.deliveryTip ? <span aria-label="Has delivery tip" style={{ fontSize: '12px', flexShrink: 0 }}>💡</span> : null}
+                  {entry.deliveryTip ? <span aria-label="Has delivery tip" style={{ fontSize: '12px', flexShrink: 0 }}>💡</span> : null}
                 </div>
-                {entry?.deliveryTip && hoveredTipIndex === index ? (
+                {entry.deliveryTip && hoveredTipIndex === index ? (
                   <div style={{ position: 'absolute', left: '50%', bottom: 'calc(100% + 8px)', transform: 'translateX(-50%)', width: 'min(260px, 75vw)', background: '#1f2937', color: '#fff', padding: '10px 12px', borderRadius: '8px', boxShadow: '0 8px 18px rgba(0,0,0,0.22)', fontSize: '12px', lineHeight: 1.4, textAlign: 'left', zIndex: 999, pointerEvents: 'none' }}>
                     <div style={{ fontWeight: 700, marginBottom: '4px' }}>Delivery Tip</div>
                     <div>{entry.deliveryTip}</div>
@@ -316,9 +311,11 @@ const AgentRebuttals: React.FC = () => {
                 ) : null}
               </button>
             ))}
-            {activeCampaign !== ALL_CAMPAIGNS && displayedEntries.length === 0 ? (
+            {displayedEntries.length === 0 ? (
               <div style={{ color: '#6a7380', fontSize: '14px', padding: '8px 2px', gridColumn: '1 / -1' }}>
-                {`No live rebuttals are currently published for ${activeCampaign}.`}
+                {activeCampaign === ALL_CAMPAIGNS
+                  ? 'No live rebuttals are currently published.'
+                  : `No live rebuttals are currently published for ${activeCampaign}.`}
               </div>
             ) : null}
           </div>
