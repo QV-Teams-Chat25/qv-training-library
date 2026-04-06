@@ -169,11 +169,18 @@ const AgentProcess: React.FC = () => {
 
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button
-              onClick={async () => {
-                const refreshed = await refreshLiveProcess();
-                if (getVerificationEntries(refreshed.Verification).length > 0) {
+              onClick={() => {
+                if (primaryEntry) {
                   setActiveIndex(0);
+                  void refreshLiveProcess();
+                  return;
                 }
+
+                void refreshLiveProcess().then((refreshed) => {
+                  if (getVerificationEntries(refreshed.Verification).length > 0) {
+                    setActiveIndex(0);
+                  }
+                });
               }}
               style={{ width: '100%', maxWidth: '560px', border: primaryEntry ? '1px solid #cbdcf2' : '1px dashed #d8deea', background: primaryEntry ? 'linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%)' : '#f8fafc', color: primaryEntry ? '#13406f' : '#8a97ab', fontWeight: 700, fontSize: '20px', letterSpacing: '0.01em', borderRadius: '10px', padding: '18px 16px', cursor: 'pointer', minHeight: '76px', boxShadow: primaryEntry ? 'inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(16, 54, 92, 0.08)' : 'none', transition: 'background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease' }}
             >
