@@ -1,18 +1,42 @@
+const DEFAULT_DEPLOYED_API_BASE_URL = 'https://qv-training-library.onrender.com/api';
+
+type RuntimeEnv = typeof globalThis & {
+  process?: {
+    env?: Record<string, string | undefined>;
+  };
+  __QV_API_CONFIG__?: {
+    API_BASE_URL?: string;
+  };
+};
+
 const resolveApiBaseUrl = () => {
-  const envBaseUrl = process.env.REACT_APP_API_BASE_URL?.trim();
+  const runtimeEnv = globalThis as RuntimeEnv;
+  const envBaseUrl = runtimeEnv.process?.env?.REACT_APP_API_BASE_URL?.trim();
   if (envBaseUrl) {
     return envBaseUrl.replace(/\/$/, '');
   }
 
-  if (typeof window === 'undefined') {
-    return '/api';
+  const runtimeConfigBaseUrl = runtimeEnv.__QV_API_CONFIG__?.API_BASE_URL?.trim();
+  if (runtimeConfigBaseUrl) {
+    return runtimeConfigBaseUrl.replace(/\/$/, '');
   }
 
-  const { protocol, hostname, port } = window.location;
-  const isSameOriginProduction = !port || port === '80' || port === '443' || port === '5000';
+  if (typeof window === 'undefined') {
+    return DEFAULT_DEPLOYED_API_BASE_URL;
+  }
 
-  if (isSameOriginProduction) {
-    return '/api';
+  const { protocol, hostname, port, origin } = window.location;
+  const normalizedHost = hostname.toLowerCase();
+  const isLocalhost = normalizedHost === 'localhost' || normalizedHost === '127.0.0.1';
+  const isSameOriginApiHost = normalizedHost.includes('onrender.com') || port === '5000';
+  const isStandardWebPort = !port || port === '80' || port === '443';
+
+  if (isLocalhost) {
+    return `${protocol}//${hostname}:5000/api`;
+  }
+
+  if (isSameOriginApiHost || isStandardWebPort) {
+    return `${origin}/api`;
   }
 
   return `${protocol}//${hostname}:5000/api`;

@@ -3,6 +3,7 @@ node_modules/
 client/build/
 dist/
 coverage/
+server/data/
 .env
 .env.local
 .env.development.local

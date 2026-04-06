@@ -1,7 +1,21 @@
 (function () {
   var config = window.__QV_API_CONFIG__ || {};
-  var isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  var fallbackApiBaseUrl = isLocalhost ? 'http://localhost:5000/api' : window.location.origin + '/api';
+  var DEFAULT_DEPLOYED_API_BASE_URL = 'https://qv-training-library.onrender.com/api';
+  var hostname = (window.location.hostname || '').toLowerCase();
+  var port = window.location.port || '';
+  var isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+  var isSameOriginApiHost = hostname.indexOf('onrender.com') >= 0 || port === '5000';
+  var isStandardWebPort = !port || port === '80' || port === '443';
+  var fallbackApiBaseUrl = DEFAULT_DEPLOYED_API_BASE_URL;
+
+  if (isSameOriginApiHost) {
+    fallbackApiBaseUrl = window.location.origin + '/api';
+  } else if (!isStandardWebPort) {
+    fallbackApiBaseUrl = window.location.protocol + '//' + window.location.hostname + ':5000/api';
+  } else if (isLocalhost) {
+    fallbackApiBaseUrl = 'http://localhost:5000/api';
+  }
+
   var API_BASE_URL = config.API_BASE_URL || fallbackApiBaseUrl;
   var isHttpApi = API_BASE_URL.indexOf('http://') === 0 || API_BASE_URL.indexOf('https://') === 0;
   var REBUTTALS_WORKING_KEY = 'qvApiRebuttalsWorking';
